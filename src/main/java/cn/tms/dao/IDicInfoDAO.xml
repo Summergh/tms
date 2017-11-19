@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tms.dao.IDicInfoDAO">
+    <!--1.获取所有教师集合-->
+    <select id="findAllTeacher" parameterType="DicInfo" resultType="DicInfo">
+        select * from tms_dic where dictype=1
+    </select>
+
+    <!--1.获取所有机房集合-->
+    <select id="findAllLab" parameterType="DicInfo" resultType="DicInfo">
+        select * from tms_dic where dictype=2
+    </select>
+
+</mapper>

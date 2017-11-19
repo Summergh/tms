@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tms.dao.IContentDAO">
+    <!--1.获取所有内容集合-->
+    <select id="getAllContent" resultType="Content">
+     select * from cm_column
+ </select>
+    <!--1.获取所有内容集合-->
+    <select id="getAllContents" parameterType="java.lang.String" resultType="Content">
+        select * from cm_column where 1=1
+        <if test="columnname!=null||columnname!=''">
+            and columnname like concat('%',#{columnname},'%')
+        </if>
+    </select>
+
+    <resultMap id="newsMapper" type="News">
+        <id column="id" property="id"></id>
+        <result column="newtitle" property="newtitle"></result>
+        <result column="Update_time" property="updateTime"></result>
+        <result column="type" property="type"></result>
+        <result column="tag" property="tag"></result>
+        <result column="abstracts" property="abstracts"></result>
+        <result column="contents" property="contents"></result>
+        <result column="imageurl" property="imageurl"></result>
+        <result column="cm_syscode" property="cmSyscode"></result>
+        <association property="content" javaType="Content">
+            <id column="syscode" property="syscode"></id>
+            <result column="columnname" property="columnname"></result>
+        </association>
+        <association property="userInfo" javaType="UserInfo">
+            <id column="userid" property="userid"></id>
+            <result column="username" property="username"></result>
+        </association>
+    </resultMap>
+    <!--<select id="getAllNewBySyscode" resultMap="newsMapper">
+    select * from news,tms_user,cm_column
+            WHERE  news.userid=tms_user.userid
+            and news.cm_syscode=cm_column.syscode and news.cm_syscode=#{syscode}
+    </select>-->
+
+    <select id="getAllNewBySyscode" resultMap="newsMapper">
+        select * from news,tms_user,cm_column
+        WHERE news.userid=tms_user.userid
+        and news.cm_syscode=cm_column.syscode
+        and news.cm_syscode=#{cmsyscode}
+        <!--  <if test="newtitle!=null||newtitle!=''">
+              and news.newtitle like concat ('%',#{newtitle},'%')
+          </if>
+          <if test="type!=null||type!=''">
+              and news.type=#{type}
+          </if>-->
+        limit #{pageindex},#{pageSize}
+    </select>
+    <select id="getMuchNews" resultMap="newsMapper">
+        select * from news,tms_user,cm_column
+        WHERE news.userid=tms_user.userid
+        and news.cm_syscode=cm_column.syscode
+        and news.cm_syscode=#{cmsyscode}
+        <if test="newtitle!=null||newtitle!=''">
+            and news.newtitle like concat ('%',#{newtitle},'%')
+        </if>
+        <if test="type!=null||type!=''">
+            and news.type=#{type}
+        </if>
+        limit #{pageindex},#{pageSize}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from news,tms_user,cm_column
+        WHERE news.userid=tms_user.userid
+        and news.cm_syscode=cm_column.syscode and news.cm_syscode=#{cmsyscode}
+        <if test="newtitle!=null||newtitle!=''">
+            and news.newtitle like concat ('%',#{newtitle},'%')
+        </if>
+        <if test="type!=null||type!=''">
+            and news.type=#{type}
+        </if>
+    </select>
+
+    <insert id="addNews">
+    INSERT INTO news (newtitle,cm_syscode,userid,type,imageurl,tag,abstracts,contents)
+      values
+     (#{newtitle},#{cmSyscode},#{userid},#{type},#{imageurl},#{tag},#{abstracts},#{contents})
+    </insert>
+
+
+    <select id="selectNewsById" resultMap="newsMapper">
+           select * from news,tms_user,cm_column
+        WHERE news.userid=tms_user.userid
+        and news.cm_syscode=cm_column.syscode
+        and news.id=#{id}
+    </select>
+
+    <update id="updNewsById">
+        UPDATE news SET newtitle =#{newtitle},cm_syscode =#{cmSyscode},userid =#{userid},type =#{type},imageurl =#{imageurl},tag =#{tag},abstracts =#{abstracts},contents =#{contents} WHERE id=#{id}
+    </update>
+
+
+</mapper>

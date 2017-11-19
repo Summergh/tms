@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tms.dao.IPrivilegeDAO">
+    <!--1.根据用户获取用户权限-->
+    <select id="getAllPrivilegesByEmpId" resultType="Privilege">
+        select * from sys_privilege
+        where id in
+        (
+            select privilegeid
+            from sys_role_privilege
+            where roleid in
+            (
+                 select roleid from sys_user_role
+                 where userid=#{userid}
+            )
+          )
+    </select>
+
+    <!--获取指定角色下的所有权限集合-->
+    <select id="getAllPrivilegesByRoldId" resultType="Privilege">
+        select * from sys_privilege
+        where id in
+        (
+        select privilegeid
+        from sys_role_privilege
+        where roleid=#{roleid}
+        )
+    </select>
+
+    <!--2.获取用所有户权限-->
+    <select id="getAllPrivileges" resultType="Privilege">
+        select * from sys_privilege
+    </select>
+
+    <!--3.删除指定角色的所有权限-->
+    <delete id="delPrivilegeByRoldId">
+        delete  from sys_role_privilege where roleid=#{roleid}
+    </delete>
+
+    <!--4.向角色权限表中添加数据-->
+    <insert id="addDataToRolePrivilege">
+        insert into  sys_role_privilege(roleid,privilegeid) values(#{rid},#{pid})
+    </insert>
+
+
+</mapper>

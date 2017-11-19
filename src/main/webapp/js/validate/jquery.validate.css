@@ -1,0 +1,20 @@
+label.error {
+	color: red;
+	background: transparent url(images/unchecked.gif) no-repeat scroll 10px 8px;
+	padding-left: 30px;	
+	font: bold 12px/29px "Î¢ÈíÑÅºÚ";
+	width: auto;
+	display:inline-block;
+	margin-top: 4px;
+}
+label.error2 {
+	color: red;
+	background: transparent url(images/unchecked.gif) no-repeat scroll 0px 0px;
+	padding-left: 14px;
+	height: 25px;
+	font: bold 12px/29px;
+	width: auto;
+}
+label.checked {
+	background: transparent url(images/checked.gif) no-repeat scroll 0 0;
+}

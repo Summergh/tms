@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tms.dao.ILabReportDAO">
+    <!--1.添加报表-->
+    <insert id="saveLabReport" parameterType="LabReport">
+         insert into tms_labreport(content,title) values(#{content},#{title})
+    </insert>
+
+    <!--2获取报表数据-->
+    <select id="getLabReport" resultType="LabReport">
+      select * from  tms_labreport where id=(select max(id) from tms_labreport)
+    </select>
+</mapper>

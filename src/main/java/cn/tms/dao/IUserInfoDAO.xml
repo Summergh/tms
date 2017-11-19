@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tms.dao.IUserInfoDAO">
+    <!--1.登录-->
+    <select id="isLogin" parameterType="UserInfo" resultType="UserInfo">
+        select userid,username from tms_user where username=#{username} and userpwd=#{userpwd}
+    </select>
+    <!--2.获取单页数据-->
+    <select id="getOnePageData" resultType="UserInfo">
+        select * from tms_user
+       <where>
+           <if test="username!=null">
+               and  username like '%' #{username} '%'
+           </if>
+
+       </where>
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+    <!--3.获取总记录数-->
+    <select id="getTotalCount" resultType="int">
+        select count(1) from tms_user
+    </select>
+
+    <!--4.获取带条件的总记录数-->
+    <select id="getTotalCountByUserName" resultType="int">
+        select count(1) from tms_user WHERE username like  '%' #{username} '%'
+    </select>
+
+    <select id="getPersonPrivilege" resultType="Privilege">
+            select * from sys_privilege
+        where id in
+        (
+            select privilegeid
+            from sys_role_privilege
+            where roleid in
+            (
+                 select roleid from sys_user_role
+                 where userid=#{userid}
+            )
+          )
+    </select>
+
+</mapper>
